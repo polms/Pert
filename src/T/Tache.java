@@ -16,7 +16,7 @@ public class Tache implements Serializable {
     public Tache(Projet p, String description, int duree) {
         this.p = p;
         p.addTaches(this);
-        this.id = intToLetters(p.getNBTache()+1);
+        this.id = intToLetters(p.getNBTache());
         this.description = description;
         this.duree = duree;
         this.mesPredecesseurs = new HashSet<>();
