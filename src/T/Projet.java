@@ -6,15 +6,18 @@ import java.util.ArrayList;
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
     private ArrayList<Tache> mesTaches;
+    private int nbTache;
     private transient ProjetTableModel model;
 
     public Projet() {
         this.mesTaches = new ArrayList<>();
         this.model = new ProjetTableModel(this);
+        this.nbTache = 0;
     }
 
     public void addTaches(Tache t) {
         this.mesTaches.add(t);
+        this.nbTache++;
     }
 
     public Tache[] getTaches() {
@@ -27,5 +30,9 @@ public class Projet implements Serializable {
 
     public ProjetTableModel getModel() {
         return model;
+    }
+
+    public int getNBTache()  {
+        return this.nbTache;
     }
 }

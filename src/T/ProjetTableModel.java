@@ -13,7 +13,7 @@ public class ProjetTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int colums) {
-        return noms[colums]; // trouver pourquoi ça marche pas
+        return noms[colums];
     }
 
     @Override

@@ -13,13 +13,12 @@ import java.io.*;
 
 public class Principale extends JFrame {
     private Projet p;
-    private ProjetTableModel model;
     private JTable table;
 
     public Principale() {
         this.p = new Projet();
         this.setTitle("Fenetre principale");
-        this.setSize(400,400);
+        this.setSize(500,500);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.windowBuidler();
     }
@@ -32,15 +31,16 @@ public class Principale extends JFrame {
         addTache.addActionListener(new Ecouteur());
         this.table = new JTable(this.p.getModel());
         this.table.addMouseListener(new EcouteurListe());
+        JScrollPane sp = new JScrollPane(this.table);
         JButton save = new JButton("Sauvegarder");
         save.addActionListener(new EcouteurSave());
         JButton load = new JButton("Charger");
         load.addActionListener(new EcouteurLoad());
 
         panel.add(addTache);
-        panel.add(this.table);
         panel.add(save);
         panel.add(load);
+        panel.add(sp);
         this.setContentPane(panel);
     }
 
@@ -94,7 +94,7 @@ public class Principale extends JFrame {
             if (e.getClickCount() == 2) {
                 System.out.println(p.getTaches()[table.getSelectedRow()].getId());
                 NouvelleTacheUI t = new NouvelleTacheUI(p);
-                t.setDescription(p.getTaches()[table.getSelectedRow()].getDescription()); // crée un constructeur
+                t.setDescription(p.getTaches()[table.getSelectedRow()].getDescription()); // crï¿½e un constructeur
                 t.setTemp(""+p.getTaches()[table.getSelectedRow()].getDuree());
             }
         }

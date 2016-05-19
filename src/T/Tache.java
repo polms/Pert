@@ -12,11 +12,11 @@ public class Tache implements Serializable {
     private boolean estCheminCritique;
     private HashSet<Tache> mesPredecesseurs;
     private Projet p;
-    private static int nb = 0; // remplacer par autre chose (ni serialisation, ni multiprojet)
 
-    public Tache(String description, int duree) {
-        Tache.nb++;
-        this.id = intToLetters(Tache.nb);
+    public Tache(Projet p, String description, int duree) {
+        this.p = p;
+        p.addTaches(this);
+        this.id = intToLetters(p.getNBTache()+1);
         this.description = description;
         this.duree = duree;
         this.mesPredecesseurs = new HashSet<>();
