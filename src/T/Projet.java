@@ -16,8 +16,10 @@ public class Projet implements Serializable {
     }
 
     public void addTaches(Tache t) {
-        this.mesTaches.add(t);
-        this.nbTache++;
+        if (t != null && ! this.mesTaches.contains(t)) {
+            this.mesTaches.add(t);
+            this.nbTache++;
+        }
     }
 
     public Tache[] getTaches() {

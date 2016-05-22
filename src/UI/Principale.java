@@ -95,12 +95,12 @@ public class Principale extends JFrame {
                 System.out.println(p.getTaches()[table.getSelectedRow()].getId());
                 NouvelleTacheUI t = new NouvelleTacheUI(p);
                 t.setDescription(p.getTaches()[table.getSelectedRow()].getDescription()); // cr�e un constructeur
-                t.setTemp(""+p.getTaches()[table.getSelectedRow()].getDuree());
+                t.setTemp(p.getTaches()[table.getSelectedRow()].getDuree());
             }
         }
     }
 
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws IOException {
         Principale p = new Principale();
         p.setVisible(true);
     }
