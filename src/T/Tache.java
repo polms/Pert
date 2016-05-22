@@ -2,6 +2,7 @@ package T;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Tache implements Serializable {
@@ -24,8 +25,18 @@ public class Tache implements Serializable {
 
     public void addPredecesseur(Tache t) {
         if (! this.equals(t)) {
+            for (int i = 0; i < this.p.getNBTache(); i++) {
+                if (this.p.getTaches()[i].getPredecesseurs().contains(this)) {
+                    this.p.getTaches()[i].addPredecesseurUnsafe(t); // Unsafe pour eviter la récursivite
+                }
+            }
+            this.mesPredecesseurs.addAll(t.getPredecesseurs());
             this.mesPredecesseurs.add(t);
         }
+    }
+
+    private void addPredecesseurUnsafe(Tache t) {
+        this.mesPredecesseurs.add(t);
     }
 
     public String getId() {
