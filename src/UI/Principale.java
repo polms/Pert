@@ -92,10 +92,7 @@ public class Principale extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
-                System.out.println(p.getTaches()[table.getSelectedRow()].getId());
-                NouvelleTacheUI t = new NouvelleTacheUI(p);
-                t.setDescription(p.getTaches()[table.getSelectedRow()].getDescription()); // cr�e un constructeur
-                t.setTemp(p.getTaches()[table.getSelectedRow()].getDuree());
+                ModifierTacheUI t = new ModifierTacheUI(p,p.getTaches()[table.getSelectedRow()]);
             }
         }
     }

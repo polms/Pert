@@ -22,8 +22,18 @@ public class Tache implements Serializable {
         this.mesPredecesseurs = new HashSet<>();
     }
 
+    public void addPredecesseur(Tache t) {
+        if (! this.equals(t)) {
+            this.mesPredecesseurs.add(t);
+        }
+    }
+
     public String getId() {
         return id;
+    }
+
+    public Projet getProjet(){
+        return this.p;
     }
 
     public String getDescription() {
@@ -38,12 +48,22 @@ public class Tache implements Serializable {
         return mesPredecesseurs.toString();
     }
 
-    public static String intToLetters(int value)
-    {
+    public boolean equals(Tache o) {
+        return (this.p == o.getProjet()) && (this.id.equals(o.getId()));
+    }
+
+    public boolean precede(Tache o) {
+        return (this.p == o.getProjet()) && (this.mesPredecesseurs.contains(o));
+    }
+
+    public String toString() {
+        return this.id;
+    }
+
+    public static String intToLetters(int value) {
         String result = "";
-        while (--value >= 0)
-        {
-            result = (char)('A' + value % 26) + result;
+        while (--value >= 0) {
+            result = (char) ('A' + value % 26) + result;
             value /= 26;
         }
         return result;

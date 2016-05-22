@@ -12,6 +12,7 @@ public class NouvelleTacheUI extends JFrame {
     private Projet p;
     private JTextArea description;
     private JSpinner temp;
+    private JTable table;
 
     public NouvelleTacheUI(Projet p) {
         this.p = p;
@@ -37,6 +38,10 @@ public class NouvelleTacheUI extends JFrame {
         panel.add(l_temp);
         this.temp = new JSpinner(new SpinnerNumberModel(1,1,Integer.MAX_VALUE, 1));
         panel.add(this.temp);
+
+        this.table = new JTable(this.p.getModel());
+        panel.add(new JScrollPane(this.table));
+
         JButton valide = new JButton("Valide");
         valide.addActionListener(new Ecouteur());
         panel.add(valide);

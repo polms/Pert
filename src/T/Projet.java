@@ -34,6 +34,10 @@ public class Projet implements Serializable {
         return model;
     }
 
+    public ProjetTableModelPredecesseurs getModel(Tache t) {
+        return new ProjetTableModelPredecesseurs(this,t);
+    }
+
     public int getNBTache()  {
         return this.nbTache;
     }

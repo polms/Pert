@@ -5,6 +5,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("SpellCheckingInspection")
 public class ProjetTableModel extends AbstractTableModel {
     private Projet p;
+    private Tache t;
     private String[] noms = {"Id", "Descr", "t", "Pre"};
 
     public ProjetTableModel(Projet p) {
