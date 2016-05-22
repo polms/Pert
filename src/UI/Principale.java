@@ -16,8 +16,8 @@ public class Principale extends JFrame {
     private JTable table;
 
     public Principale() {
-        this.p = new Projet();
-        this.setTitle("Fenetre principale");
+        this.p = new Projet("Projet sans nom");
+        this.setTitle(p.getNom()+" - Pert");
         this.setSize(500,500);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.windowBuidler();

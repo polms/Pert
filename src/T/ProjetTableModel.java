@@ -42,7 +42,7 @@ public class ProjetTableModel extends AbstractTableModel {
                 o = t.getDuree();
                 break;
             case 3:
-                o = t.getPredecesseurs();
+                o = t.getPredecesseurs().toString();
                 break;
             default:
                 o = "index du getVelueAt invalide";

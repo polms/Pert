@@ -44,7 +44,7 @@ public class ProjetTableModelPredecesseurs extends AbstractTableModel{
                     o = t.getDuree();
                     break;
                 case 3:
-                    o = t.getPredecesseurs();
+                    o = t.getPredecesseurs().toString();
                     break;
                 case 4:
                     o = "v:"+this.t.precede(t);

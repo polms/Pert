@@ -44,8 +44,8 @@ public class Tache implements Serializable {
         return duree;
     }
 
-    public String getPredecesseurs() {
-        return mesPredecesseurs.toString();
+    public HashSet<Tache> getPredecesseurs() {
+        return mesPredecesseurs;
     }
 
     public boolean equals(Tache o) {

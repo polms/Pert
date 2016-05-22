@@ -2,14 +2,17 @@ package T;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
     private ArrayList<Tache> mesTaches;
+    private String nom;
     private int nbTache;
     private transient ProjetTableModel model;
 
-    public Projet() {
+    public Projet(String nom) {
+        this.nom = nom;
         this.mesTaches = new ArrayList<>();
         this.model = new ProjetTableModel(this);
         this.nbTache = 0;
@@ -20,6 +23,30 @@ public class Projet implements Serializable {
             this.mesTaches.add(t);
             this.nbTache++;
         }
+    }
+
+    public void supprimeTache(Tache t) {
+        if (! t.getPredecesseurs().isEmpty()) {
+
+        }
+    }
+
+    /*public void supprimeTache(Tache t) {
+        if (! t.getPredecesseurs().isEmpty()) {
+            supprimeTache(t.getPredecesseurs().iterator());
+        }
+        this.mesTaches.remove(t);
+        this.model.fireTableDataChanged();
+    }
+
+    private void supprimeTache(Iterator i) {
+        while (i.hasNext()) {
+            supprimeTache((Tache) i.next());
+        }
+    }*/
+
+    public  String getNom() {
+        return this.nom;
     }
 
     public Tache[] getTaches() {
