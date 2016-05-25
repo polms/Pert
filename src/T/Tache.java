@@ -1,5 +1,6 @@
 package T;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,8 +25,8 @@ public class Tache implements Serializable {
     }
 
     public void addPredecesseur(Tache t) {
-        if (! this.equals(t)) {
-            for (int i = 0; i < this.p.getNBTache(); i++) {
+        if (!this.equals(t)) {
+            for (int i = 0; i < this.p.getNBTache(); i++) { // demander si effet désirer
                 if (this.p.getTaches()[i].getPredecesseurs().contains(this)) {
                     this.p.getTaches()[i].addPredecesseurUnsafe(t); // Unsafe pour eviter la récursivite
                 }
@@ -39,11 +40,43 @@ public class Tache implements Serializable {
         this.mesPredecesseurs.add(t);
     }
 
+    public void removePredecesseur(Tache t) {
+        if (!this.equals(t)) {
+            for (int i = 0; i < this.p.getNBTache(); i++) {
+                Tache cur = this.p.getTaches()[i];
+                HashSet<Tache> cur_pre = this.p.getTaches()[i].getPredecesseurs();
+                if (!cur_pre.isEmpty()) {
+                    if (cur_pre.contains(this)) {
+                        int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que la supression de " + t + " de la liste des predecesseur de " + this + " antraine la supresion de " + t + " dans " + cur + " ?", "Confirmation de suppression", JOptionPane.YES_NO_OPTION);
+                        if (reponse == JOptionPane.OK_OPTION) {
+                            cur.removePredecesseurUnsafe(t);
+                        } else if (reponse == JOptionPane.NO_OPTION) {
+                            // deplacer les taches
+
+                        }
+                    }
+                    // verifier  que le predecesseur n'est pas imposer par un autre prédecesseur
+                    if (this.getPredecesseurs().containsAll(cur_pre) && !this.equals(cur) && !t.equals(cur)) {
+                        int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que la supression de " + t + "entraine la perte de " + cur + " comme predecesseur", "Confirmation de supression", JOptionPane.YES_NO_OPTION);
+                        if (reponse == JOptionPane.YES_OPTION) {
+                            this.removePredecesseurUnsafe(cur);
+                        }
+                    }
+                }
+            }
+            this.mesPredecesseurs.remove(t);
+        }
+    }
+
+    private void removePredecesseurUnsafe(Tache t) {
+        this.mesPredecesseurs.remove(t);
+    }
+
     public String getId() {
         return id;
     }
 
-    public Projet getProjet(){
+    public Projet getProjet() {
         return this.p;
     }
 

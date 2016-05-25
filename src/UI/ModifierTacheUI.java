@@ -52,7 +52,7 @@
             this.table.addMouseListener(new EcouteurListe());
             panel.add(new JScrollPane(this.table));
 
-            JButton valide = new JButton("Valide");
+            JButton valide = new JButton("Valider");
             valide.addActionListener(new Ecouteur());
             panel.add(valide);
             this.setContentPane(panel);
@@ -71,8 +71,14 @@
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    t.addPredecesseur(p.getTaches()[table.getSelectedRow()]);
-                    model.fireTableDataChanged();
+                    if (t.precede(p.getTaches()[table.getSelectedRow()])) { // si la tache precede: SUPPRIMER
+                        t.removePredecesseur(p.getTaches()[table.getSelectedRow()]);
+                        model.fireTableDataChanged();
+                    } else { // si la tache ne precede pas: AJOUTER
+                        t.addPredecesseur(p.getTaches()[table.getSelectedRow()]);
+                        model.fireTableDataChanged();
+                    }
+                    p.getModel().fireTableDataChanged(); // temporaire en attende d'un systeme d'aperçu
                 }
             }
         }
