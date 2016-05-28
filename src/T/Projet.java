@@ -1,9 +1,10 @@
 package T;
 
 import ZoneDessin.*;
-import java.io.Serializable;
+
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import javax.swing.JOptionPane;
 
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
@@ -56,6 +57,18 @@ public class Projet implements Serializable {
         }
     }
 
+    public void saveToFile(File f) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f));
+            oos.writeObject(this);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    e1.getLocalizedMessage(),
+                    "Erreur d'écriture",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     public  String getNom() {
         return this.nom;
@@ -87,5 +100,23 @@ public class Projet implements Serializable {
 
     public int getNBEtape()  {
         return this.nbEtape;
+    }
+
+    public static Projet loadFromFile(File f) {
+        Projet np = null;
+        try {
+            ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(f)) ;
+            np = (Projet) ois.readObject();
+            np.setModel(new ProjetTableModel(np));
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    e.getLocalizedMessage(),
+                    "Erreur de lecture",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return np;
     }
 }

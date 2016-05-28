@@ -57,12 +57,7 @@ public class Principale extends JFrame {
             JFileChooser fileChooser = new JFileChooser("G:\\");
             if (fileChooser.showSaveDialog(Principale.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                try {
-                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-                    oos.writeObject(p);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                p.saveToFile(file);
             }
         }
     }
@@ -73,17 +68,9 @@ public class Principale extends JFrame {
             JFileChooser fileChooser = new JFileChooser("G:\\");
             if (fileChooser.showOpenDialog(Principale.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                try {
-                    ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(file)) ;
-                    p = (Projet) ois.readObject();
-                    p.setModel(new ProjetTableModel(p));
-                    table.setModel(p.getModel());
-                    p.getModel().fireTableDataChanged();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                }
+                p = Projet.loadFromFile(file);
+                table.setModel(p.getModel());
+                p.getModel().fireTableDataChanged();
             }
         }
     }
