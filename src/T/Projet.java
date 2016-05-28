@@ -24,6 +24,7 @@ public class Projet implements Serializable {
         this.nbEtape=0;
     }
 
+    @Deprecated // cette fonction vas devenir privée
     public void addTaches(Tache t) {
         if (t != null && ! this.mesTaches.contains(t)) {
             this.mesTaches.add(t);

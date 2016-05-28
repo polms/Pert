@@ -1,12 +1,13 @@
 package T;
 
 import javax.swing.table.AbstractTableModel;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class ProjetTableModel extends AbstractTableModel {
     private Projet p;
     private Tache t;
-    private String[] noms = {"Id", "Descr", "t", "Pre"};
+    private String[] noms = {"Identifiant", "Description", "temp", "Prédécesseurs",};
 
     public ProjetTableModel(Projet p) {
         this.p = p;
@@ -48,5 +49,30 @@ public class ProjetTableModel extends AbstractTableModel {
                 o = "index du getVelueAt invalide";
         }
         return o;
+    }
+
+    public boolean isCellEditable(int rowIndex,int columnIndex) {
+        return columnIndex == 1 || columnIndex == 2;
+    }
+
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) throws IllegalArgumentException {
+        Tache t = this.p.getTaches()[rowIndex];
+        switch (columnIndex) {
+            case 1:
+                t.setDescription((String)aValue);
+                break;
+            case 2:
+                try {
+                    t.setDuree(Integer.parseInt((String) aValue));
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "La durée ne peut pas contenir autrechose que des nombres",
+                            "Erreur de saisie",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("La colone n'est pas modifiable: "+columnIndex);
+        }
     }
 }

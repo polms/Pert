@@ -95,8 +95,18 @@ public class Tache implements Serializable {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+        //this.p.getModel().fireTableDataChanged();
+    }
+
     public int getDuree() {
         return duree;
+    }
+
+    public void setDuree(int duree) {
+        this.duree = duree;
+        //this.p.getModel().fireTableDataChanged();
     }
 
     public HashSet<Tache> getPredecesseurs() {

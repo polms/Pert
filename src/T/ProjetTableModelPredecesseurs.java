@@ -5,7 +5,7 @@ import javax.swing.table.AbstractTableModel;
 public class ProjetTableModelPredecesseurs extends AbstractTableModel{
     private Projet p;
     private Tache t;
-    private String[] noms = {"Id", "Descr", "t", "Pre", "est pre"};
+    private String[] noms = {"Identifiant", "Description", "temp", "Prédécesseurs", "est Prédécesseurs"};
 
     public ProjetTableModelPredecesseurs(Projet p, Tache t) {
         this.p = p;
@@ -46,7 +46,7 @@ public class ProjetTableModelPredecesseurs extends AbstractTableModel{
                     o = t.getPredecesseurs().toString();
                     break;
                 case 4:
-                    o = "<html><p style=\"color: "+(this.t.precede(t) ? "green" : "red")+"\">"+this.t.precede(t)+"</p></html>";
+                    o = "<html><p style=\"color: "+(this.t.precede(t) ? "green" : "red")+"\">"+(this.t.precede(t) ? "✔":"✘")+"</p></html>";
                     break;
                 default:
                     o = "index du getVelueAt invalide";
