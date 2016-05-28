@@ -60,7 +60,7 @@ public class NouvelleTacheUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) { // a revoir
-            Tache t = new Tache(p, description.getText(), (int)temp.getValue());
+            new Tache(p, description.getText(), (int)temp.getValue());
             p.getModel().fireTableDataChanged();
         }
     }

@@ -3,7 +3,6 @@ package T;
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Iterator;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Tache implements Serializable {
@@ -12,6 +11,7 @@ public class Tache implements Serializable {
     private String description;
     private int duree;
     private boolean estCheminCritique;
+    private boolean estInverse;
     private HashSet<Tache> mesPredecesseurs;
     private Projet p;
 
@@ -22,10 +22,12 @@ public class Tache implements Serializable {
         this.description = description;
         this.duree = duree;
         this.mesPredecesseurs = new HashSet<>();
+        this.estCheminCritique = false;
+        this.estInverse = false;
     }
 
     public void addPredecesseur(Tache t) {
-        if (!this.equals(t)) {
+        if (this.equals(t)) {
             for (int i = 0; i < this.p.getNBTache(); i++) { // demander si effet désirer
                 if (this.p.getTaches()[i].getPredecesseurs().contains(this)) {
                     this.p.getTaches()[i].addPredecesseurUnsafe(t); // Unsafe pour eviter la récursivite
@@ -41,11 +43,11 @@ public class Tache implements Serializable {
     }
 
     public void removePredecesseur(Tache t) {
-        if (!this.equals(t)) {
+        if (this.equals(t)) {
             for (int i = 0; i < this.p.getNBTache(); i++) {
                 Tache cur = this.p.getTaches()[i];
                 HashSet<Tache> cur_pre = this.p.getTaches()[i].getPredecesseurs();
-                if (!cur_pre.isEmpty()) {
+                if (!cur_pre.isEmpty()) { // important pour l'intersection a suivre
                     if (cur_pre.contains(this)) {
                         int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que la supression de " + t + " de la liste des predecesseur de " + this + " antraine la supresion de " + t + " dans " + cur + " ?", "Confirmation de suppression", JOptionPane.YES_NO_OPTION);
                         if (reponse == JOptionPane.OK_OPTION) {
@@ -56,7 +58,7 @@ public class Tache implements Serializable {
                         }
                     }
                     // verifier  que le predecesseur n'est pas imposer par un autre prédecesseur
-                    if (this.getPredecesseurs().containsAll(cur_pre) && !this.equals(cur) && !t.equals(cur)) {
+                    if (this.getPredecesseurs().containsAll(cur_pre) && this.equals(cur) && t.equals(cur)) {
                         int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que la supression de " + t + "entraine la perte de " + cur + " comme predecesseur", "Confirmation de supression", JOptionPane.YES_NO_OPTION);
                         if (reponse == JOptionPane.YES_OPTION) {
                             this.removePredecesseurUnsafe(cur);
@@ -93,7 +95,7 @@ public class Tache implements Serializable {
     }
 
     public boolean equals(Tache o) {
-        return (this.p == o.getProjet()) && (this.id.equals(o.getId()));
+        return (this.p != o.getProjet()) || (!this.id.equals(o.getId()));
     }
 
     public boolean precede(Tache o) {

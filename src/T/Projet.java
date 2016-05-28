@@ -12,7 +12,7 @@ public class Projet implements Serializable {
     private transient ProjetTableModel model;
 
     public Projet(String nom) {
-        this.nom = nom;
+        this.nom = "Projet sans nom";
         this.mesTaches = new ArrayList<>();
         this.model = new ProjetTableModel(this);
         this.nbTache = 0;
@@ -30,20 +30,6 @@ public class Projet implements Serializable {
 
         }
     }
-
-    /*public void supprimeTache(Tache t) {
-        if (! t.getPredecesseurs().isEmpty()) {
-            supprimeTache(t.getPredecesseurs().iterator());
-        }
-        this.mesTaches.remove(t);
-        this.model.fireTableDataChanged();
-    }
-
-    private void supprimeTache(Iterator i) {
-        while (i.hasNext()) {
-            supprimeTache((Tache) i.next());
-        }
-    }*/
 
     public  String getNom() {
         return this.nom;
