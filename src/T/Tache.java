@@ -1,5 +1,7 @@
 package T;
 
+import ZoneDessin.Etape;
+
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,6 +15,8 @@ public class Tache implements Serializable {
     private boolean estCheminCritique;
     private boolean estInverse;
     private HashSet<Tache> mesPredecesseurs;
+    private Etape avant;
+    private Etape apres;
     private Projet p;
 
     public Tache(Projet p, String description, int duree) {
@@ -74,6 +78,11 @@ public class Tache implements Serializable {
         this.mesPredecesseurs.remove(t);
     }
 
+    public int nbPredecesseur()
+    {
+        return this.mesPredecesseurs.size();
+    }
+
     public String getId() {
         return id;
     }
@@ -92,6 +101,26 @@ public class Tache implements Serializable {
 
     public HashSet<Tache> getPredecesseurs() {
         return mesPredecesseurs;
+    }
+
+    public void setAvant(Etape avant) {
+        this.avant = avant;
+    }
+
+    public Etape getApres() {
+        return apres;
+    }
+
+    public void setApres(Etape apres) {
+        this.apres = apres;
+    }
+
+    public void setEstCheminCritique(boolean estCheminCritique) {
+        this.estCheminCritique = estCheminCritique;
+    }
+
+    public boolean isEstCheminCritique() {
+        return this.estCheminCritique;
     }
 
     public boolean equals(Tache o) {

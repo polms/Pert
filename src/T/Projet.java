@@ -1,21 +1,27 @@
 package T;
 
+import ZoneDessin.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
+    private ZoneDessinPert lePert;
     private ArrayList<Tache> mesTaches;
+    private ArrayList <Etape> etapesGraph;
     private String nom;
     private int nbTache;
+    private int nbEtape;
     private transient ProjetTableModel model;
 
     public Projet(String nom) {
-        this.nom = "Projet sans nom";
+        this.nom = nom;
         this.mesTaches = new ArrayList<>();
+        this.etapesGraph=new ArrayList<>();
         this.model = new ProjetTableModel(this);
         this.nbTache = 0;
+        this.nbEtape=0;
     }
 
     public void addTaches(Tache t) {
@@ -31,12 +37,35 @@ public class Projet implements Serializable {
         }
     }
 
+    public void addEtape(Etape e) {
+        if (e != null && ! this.etapesGraph.contains(e)) {
+            this.etapesGraph.add(e);
+            this.nbEtape++;
+        }
+    }
+
+    public void supprimeEtape(Etape e) {
+        for (Etape et:this.etapesGraph)
+        {
+            if (e.getId().equals(et.getId()))
+            {
+                this.etapesGraph.remove(et);
+                this.nbEtape--;
+            }
+        }
+    }
+
+
     public  String getNom() {
         return this.nom;
     }
 
     public Tache[] getTaches() {
         return  this.mesTaches.toArray(new Tache[this.mesTaches.size()]);
+    }
+
+    public Etape[] getEtape() {
+        return  this.etapesGraph.toArray(new Etape[this.etapesGraph.size()]);
     }
 
     public void setModel(ProjetTableModel m) {
@@ -53,5 +82,9 @@ public class Projet implements Serializable {
 
     public int getNBTache()  {
         return this.nbTache;
+    }
+
+    public int getNBEtape()  {
+        return this.nbEtape;
     }
 }
