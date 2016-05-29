@@ -69,8 +69,10 @@ public class Principale extends JFrame {
             if (fileChooser.showOpenDialog(Principale.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 p = Projet.loadFromFile(file);
-                table.setModel(p.getModel());
-                p.getModel().fireTableDataChanged();
+                if (p != null) {
+                    table.setModel(p.getModel());
+                    p.getModel().fireTableDataChanged();
+                }
             }
         }
     }
