@@ -34,9 +34,15 @@ public class Projet implements Serializable {
     }
 
     public void supprimeTache(Tache t) {
-        if (! t.getPredecesseurs().isEmpty()) {
-
+        for (Tache t1:this.getTaches()) {
+            if (t1.precede(t)) {
+                t1.removePredecesseur(t);
+                System.out.println("supprimeTache<"+this+">: suprimer "+t+" de "+t1);
+            }
         }
+        this.mesTaches.remove(t);
+        this.nbTache--;
+        this.model.fireTableDataChanged();
     }
 
     public void addEtape(Etape e) {

@@ -31,6 +31,7 @@ public class Principale extends JFrame {
         addTache.addActionListener(new Ecouteur());
         this.table = new JTable(this.p.getModel());
         this.table.addMouseListener(new EcouteurListe());
+        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane sp = new JScrollPane(this.table);
         JButton save = new JButton("Sauvegarder");
         save.addActionListener(new EcouteurSave());
@@ -82,6 +83,8 @@ public class Principale extends JFrame {
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() == 2) {
                 new ModifierTacheUI(p,p.getTaches()[table.getSelectedRow()]);
+            } else if (e.getClickCount() == 3) { //TODO: a changer
+                p.supprimeTache(p.getTaches()[table.getSelectedRow()]);
             }
         }
     }
