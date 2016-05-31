@@ -2,9 +2,10 @@ package T;
 
 import ZoneDessin.*;
 
+import java.awt.print.PrinterException;
 import java.io.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
@@ -74,6 +75,11 @@ public class Projet implements Serializable {
                     "Erreur d'écriture",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void print() throws PrinterException {
+        JTable jt = new JTable(this.getModel());
+        jt.print();
     }
 
     public  String getNom() {

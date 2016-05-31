@@ -89,7 +89,7 @@ public class Principale extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                table.print(JTable.PrintMode.FIT_WIDTH);
+                p.print();
             } catch (PrinterException e1) {
                 e1.printStackTrace();
             }
