@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
 import java.io.*;
 
 public class Principale extends JFrame {
@@ -37,10 +38,13 @@ public class Principale extends JFrame {
         save.addActionListener(new EcouteurSave());
         JButton load = new JButton("Charger");
         load.addActionListener(new EcouteurLoad());
+        JButton print = new JButton("Imprimer");
+        print.addActionListener(new EcouteurPrint());
 
         panel.add(addTache);
         panel.add(save);
         panel.add(load);
+        panel.add(print);
         panel.add(sp);
         this.setContentPane(panel);
     }
@@ -74,6 +78,17 @@ public class Principale extends JFrame {
                     table.setModel(p.getModel());
                     p.getModel().fireTableDataChanged();
                 }
+            }
+        }
+    }
+
+    public class EcouteurPrint implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                table.print(&JTable.PrintMode.FIT_WIDTH);
+            } catch (PrinterException e1) {
+                e1.printStackTrace();
             }
         }
     }
