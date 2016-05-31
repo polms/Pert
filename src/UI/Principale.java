@@ -28,7 +28,7 @@ public class Principale extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        JButton addTache = new JButton("Ajouter une tache");
+        JButton addTache = new JButton("Ajouter une tâche");
         addTache.addActionListener(new Ecouteur());
         this.table = new JTable(this.p.getModel());
         this.table.addMouseListener(new EcouteurListe());
@@ -40,11 +40,14 @@ public class Principale extends JFrame {
         load.addActionListener(new EcouteurLoad());
         JButton print = new JButton("Imprimer");
         print.addActionListener(new EcouteurPrint());
+        JButton delete = new JButton("Supprimer une tâche");
+        delete.addActionListener(new EcouteurDelete());
 
         panel.add(addTache);
         panel.add(save);
         panel.add(load);
         panel.add(print);
+        panel.add(delete);
         panel.add(sp);
         this.setContentPane(panel);
     }
@@ -86,9 +89,20 @@ public class Principale extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                table.print(&JTable.PrintMode.FIT_WIDTH);
+                table.print(JTable.PrintMode.FIT_WIDTH);
             } catch (PrinterException e1) {
                 e1.printStackTrace();
+            }
+        }
+    }
+
+    public class EcouteurDelete implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (table.getSelectedRowCount() == 1) {
+                p.supprimeTache(p.getTaches()[table.getSelectedRow()]);
+            } else {
+                // griser bouton supprimer
             }
         }
     }

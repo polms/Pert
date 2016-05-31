@@ -31,7 +31,7 @@ public class ProjetTableModelPredecesseurs extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         Tache t = this.p.getTaches()[rowIndex];
         Object o = "not";
-        if (this.t.equals(t)) {
+        if (! this.t.equals(t)) {
             switch (columnIndex) {
                 case 0:
                     o = t.getId();
