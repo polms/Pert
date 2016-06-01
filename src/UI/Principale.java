@@ -15,6 +15,7 @@ import java.io.*;
 public class Principale extends JFrame {
     private Projet p;
     private JTable table;
+    private JPopupMenu popupMenu;
 
     public Principale() {
         this.p = new Projet("Projet sans nom");
@@ -28,11 +29,17 @@ public class Principale extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
+        popupMenu = new JPopupMenu();
+        JMenuItem popupMenuItemAdd = new JMenuItem("Supprimer");
+        popupMenuItemAdd.addActionListener(new EcouteurDelete());
+        popupMenu.add(popupMenuItemAdd);
+
         JButton addTache = new JButton("Ajouter une tâche");
         addTache.addActionListener(new Ecouteur());
         this.table = new JTable(this.p.getModel());
         this.table.addMouseListener(new EcouteurListe());
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.table.setComponentPopupMenu(this.popupMenu);
         JScrollPane sp = new JScrollPane(this.table);
         JButton save = new JButton("Sauvegarder");
         save.addActionListener(new EcouteurSave());
@@ -110,6 +117,14 @@ public class Principale extends JFrame {
     public class EcouteurListe extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
+            if (e.isPopupTrigger()) { // pour ouvrir le popup sur la ligne du clic
+                System.out.println("test");
+                Point p = e.getPoint();
+                int rowNumber = table.rowAtPoint( p );
+                ListSelectionModel model = table.getSelectionModel();
+                model.setSelectionInterval( rowNumber, rowNumber );
+            }
+
             if (e.getClickCount() == 2) {
                 new ModifierTacheUI(p,p.getTaches()[table.getSelectedRow()]);
             } else if (e.getClickCount() == 3) { //TODO: a changer

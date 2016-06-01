@@ -35,13 +35,13 @@ public class Tache implements Serializable {
         if (! this.equals(t)) {
             for (int i = 0; i < this.p.getNBTache(); i++) { // ajout du predecesseur aux successeur de this
                 if (this.p.getTaches()[i].getPredecesseurs().contains(this)) {
-                    int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que l'ajout de "+t+" comme prédecesseur de "+this+" ajoute "+t+" comme prédecesseur de "+p.getTaches()[i]+" ?", "Confirmation d'ajout",JOptionPane.YES_NO_CANCEL_OPTION);
-                    if (reponse == JOptionPane.OK_OPTION) {
+                    //int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que l'ajout de "+t+" comme prédecesseur de "+this+" ajoute "+t+" comme prédecesseur de "+p.getTaches()[i]+" ?", "Confirmation d'ajout",JOptionPane.YES_NO_CANCEL_OPTION);
+                    //if (reponse == JOptionPane.OK_OPTION) {
                         this.p.getTaches()[i].addPredecesseurUnsafe(t); // Unsafe pour eviter la récursivite
-                    } else if (reponse == JOptionPane.CANCEL_OPTION) {
-                        annuler = true;
-                        break; // TODO: 31/05/16 trouver plus propre.
-                    }
+                    //} else if (reponse == JOptionPane.CANCEL_OPTION) {
+                    //    annuler = true;
+                    //    break; // TODO: 31/05/16 trouver plus propre.
+                    //}
                 }
             }
             if (! annuler) {
