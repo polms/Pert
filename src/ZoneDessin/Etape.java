@@ -31,7 +31,18 @@ public class Etape {
 		this.y=y;
 	}
 
-
+	public boolean ContientPoint(Point p)
+	{
+		boolean result=false;
+		
+		if((p.getX()>=this.x&&p.getX()<=this.x+100)&&(p.getY()>=this.y&&p.getY()<=this.y+100))
+			{
+				
+				result=true;
+			}
+		
+		return result;
+	}
 
 public int getX() {
 	return x;

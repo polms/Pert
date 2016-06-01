@@ -12,6 +12,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Ellipse2D.Double;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -19,6 +20,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	{
 	private Projet p;
 	boolean dragging = false;
+	private Etape EtapeSelectionne;
 
 
 	
@@ -47,13 +49,50 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			
 			super.paintComponent(g);
 			int n=0;
+			ArrayList listTacheDessine = new ArrayList<Tache>();
 			
-			for (Tache t : p.getTaches())
+			//System.out.println("taille tache a dessine :"+p.getTaches().length);
+	
+			//tant que la liste des tache dessine ne fait pas la taille du tablmeau de tache :
+			int i=0;
+			//initilisation 
+			//on dessine une etape
+			paintEtape(p.getEtape()[0],g);
+			for (Tache t : p.getTaches() )
 			{
-					paintEtape(p.getEtape()[n],g);			
-	        		paintTache(t,g,p.getEtape()[n].pointAvant(),p.getEtape()[n+1].pointApres()) ;		
-				n++;
+				if (t.nbPredecesseur()==0)
+				{
+					
+					//la tache
+	        		paintTache(p.getTaches()[i],g,p.getEtape()[0].pointAvant(),p.getEtape()[1].pointApres()) ;
+	        		listTacheDessine.add(p.getEtape()[0]);
+				}
 			}
+			while (listTacheDessine.size()== p.getTaches().length)
+			{
+				//System.out.println("taille tache dessine :"+listTacheDessine.size());
+				// si on a parcouru toute les taches:
+				if (i>=p.getTaches().length)
+				{
+					i=0;
+				}
+				
+				// si les predecesseur de la tache t sont dans la liste des tache dessine et que t n'est pas dans cette liste 
+				
+				if (p.getTaches()[i].nbPredecesseur()!=0&&listTacheDessine.containsAll(p.getTaches()[i].getPredecesseurs())&&!listTacheDessine.contains(p.getTaches()[i]))
+				{
+					System.out.println("dessin de :"+p.getEtape()[i].getId());
+				//on dessine une etape
+				paintEtape(p.getEtape()[i],g);
+				//la tache
+        		paintTache(p.getTaches()[i],g,p.getEtape()[i].pointAvant(),p.getEtape()[i+1].pointApres()) ;
+        		listTacheDessine.add(p.getEtape()[i]);
+				}
+				
+				i++;
+			}
+			System.out.println("SORTIE DE LA BOUCLE");
+			
 		}
 	public void paintEtape(Etape etape, Graphics g)
 	{
@@ -92,9 +131,6 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	       
 	        drawArrowHead((Graphics2D) g,etapeSuivante , etapePrecedente, c);
 	  
-			
-			
-			
 			}
 	   private void drawArrowHead(Graphics2D g2, Point tip, Point tail, Color color)
 	    {
@@ -117,7 +153,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	//info tache/etape
 		 
 		 }
-	
+	// Quand on presse le clic de la souris :
 	public void mousePressed(MouseEvent event) {
 
 		  Point point = event.getPoint();
@@ -125,22 +161,26 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		  int y = point.y;
 		  for (Etape e : p.getEtape())
 			{
-			  Double oval=new Double(100,100,e.getX(),e.getY());
-			  if (oval.contains(x,y)&&!pointIsAlreadyaCenter(new Point(x-50,y-50)))
+			  if (e.ContientPoint(point)&&!pointIsAlreadyaCenter(new Point(x-50,y-50)))
 			  {
-				  e.setX(x-50);
-				  e.setY(y-50);
+				 this.EtapeSelectionne=e;
 			  }
 			}
-  	
-
+		  if (this.EtapeSelectionne!=null)
+		  {
+			  EtapeSelectionne.setX(x-50);
+			  EtapeSelectionne.setY(y-50);
+		  }
 		  dragging = true;
+		  repaint();
 	}
 
 		    @Override
+		    //quand on declic la souris
 		    public void mouseReleased(MouseEvent event) {
-
+		   
 		  dragging = false;
+		  this.EtapeSelectionne=null;
 
 		    }
 
@@ -148,26 +188,22 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		    public void mouseDragged(MouseEvent event) {
 
 		  Point p = event.getPoint();
-		  
-
 		  int x = p.x;
-
 		  int y = p.y;
-		  for (Etape e : this.p.getEtape())
-			{
-			  Double oval=new Double(100,100,e.getX(),e.getY());
-			  if (oval.contains(x,y)&&!pointIsAlreadyaCenter(new Point(x-50,y-50)))
-			  {
-				  e.setX(x-50);
-				  e.setY(y-50);
-			  }
-			}
+		  
+		  if (this.EtapeSelectionne!=null)
+		  {
+			  EtapeSelectionne.setX(x-50);
+			  EtapeSelectionne.setY(y-50);
+		  }
+		  
 		  if (dragging) {
-
+		
 		repaint();
 
 		  }
 		    }
+		    
 	public boolean pointIsAlreadyaCenter(Point p)
 	{
 		boolean result=false;
