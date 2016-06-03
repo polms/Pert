@@ -30,29 +30,20 @@ public class Tache implements Serializable {
         this.estInverse = false;
     }
 
-    public void addPredecesseur(Tache t) {
-        boolean annuler = false;
-        if (! this.equals(t)) {
-            for (int i = 0; i < this.p.getNBTache(); i++) { // ajout du predecesseur aux successeur de this
-                if (this.p.getTaches()[i].getPredecesseurs().contains(this)) {
-                    //int reponse = JOptionPane.showConfirmDialog(null, "Voulez vous que l'ajout de "+t+" comme prédecesseur de "+this+" ajoute "+t+" comme prédecesseur de "+p.getTaches()[i]+" ?", "Confirmation d'ajout",JOptionPane.YES_NO_CANCEL_OPTION);
-                    //if (reponse == JOptionPane.OK_OPTION) {
-                        this.p.getTaches()[i].addPredecesseurUnsafe(t); // Unsafe pour eviter la récursivite
-                    //} else if (reponse == JOptionPane.CANCEL_OPTION) {
-                    //    annuler = true;
-                    //    break; // TODO: 31/05/16 trouver plus propre.
-                    //}
+    public boolean addPredecesseur(Tache t) {
+        boolean ajouter = false;
+        if (! this.equals(t) && ! t.estPrecedecesseur(this)) { //eviter les boucle
+            for (Tache tc: this.p.getTaches()) { // ajout des contrainte aux successeurs de this
+                if ( ! (this.equals(tc) || tc.getPredecesseurs().isEmpty()) && tc.estPrecedecesseur(this)) { //eviter les boucle + opti
+                    if (tc.getPredecesseurs().containsAll(this.getPredecesseurs()) && tc.getPredecesseurs().contains(this)) {
+                        tc.getPredecesseurs().add(t);
+                    }
                 }
             }
-            if (! annuler) {
-                this.mesPredecesseurs.addAll(t.getPredecesseurs());
-                this.mesPredecesseurs.add(t);
-            }
+            ajouter = this.mesPredecesseurs.addAll(t.getPredecesseurs());
+            ajouter = (ajouter || t.getPredecesseurs().isEmpty()) && this.mesPredecesseurs.add(t);
         }
-    }
-
-    private void addPredecesseurUnsafe(Tache t) {
-        this.mesPredecesseurs.add(t);
+        return ajouter;
     }
 
     public void removePredecesseur(Tache t) {
@@ -152,12 +143,21 @@ public class Tache implements Serializable {
         return this.estCheminCritique;
     }
 
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     public boolean equals(Tache o) {
         return (this.p == o.getProjet()) && (this.id.equals(o.getId()));
     }
 
-    public boolean precede(Tache o) {
+    public boolean estPrecedecesseur(Tache o) {
         return (this.p == o.getProjet()) && (this.mesPredecesseurs.contains(o));
+    }
+
+    public boolean precede(Tache t) {
+        return t.getPredecesseurs().contains(this);
     }
 
     public String toString() {

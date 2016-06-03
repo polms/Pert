@@ -36,7 +36,7 @@ public class Projet implements Serializable {
 
     public void supprimeTache(Tache t) {
         for (Tache t1:this.getTaches()) {
-            if (t1.precede(t)) {
+            if (t1.estPrecedecesseur(t)) {
                 t1.removePredecesseur(t);
                 System.out.println("supprimeTache<"+this+">: suprimer "+t+" de "+t1);
             }

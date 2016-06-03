@@ -5,7 +5,6 @@
     import T.Tache;
 
     import javax.swing.*;
-    import java.awt.*;
     import java.awt.event.ActionEvent;
     import java.awt.event.ActionListener;
     import java.awt.event.MouseAdapter;
@@ -71,10 +70,10 @@
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    if (t.precede(p.getTaches()[table.getSelectedRow()])) { // si la tache precede: SUPPRIMER
+                    if (t.estPrecedecesseur(p.getTaches()[table.getSelectedRow()])) { // si la tache estPrecedecesseur: SUPPRIMER
                         t.removePredecesseur(p.getTaches()[table.getSelectedRow()]);
                         model.fireTableDataChanged();
-                    } else { // si la tache ne precede pas: AJOUTER
+                    } else { // si la tache ne estPrecedecesseur pas: AJOUTER
                         t.addPredecesseur(p.getTaches()[table.getSelectedRow()]);
                         model.fireTableDataChanged();
                     }

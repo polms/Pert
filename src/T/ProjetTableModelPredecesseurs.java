@@ -46,7 +46,7 @@ public class ProjetTableModelPredecesseurs extends AbstractTableModel{
                     o = t.getPredecesseurs().toString();
                     break;
                 case 4:
-                    o = "<html><p style=\"color: "+(this.t.precede(t) ? "green" : "red")+"\">"+(this.t.precede(t) ? "✔":"✘")+"</p></html>";
+                    o = "<html><p style=\"color: "+(this.t.estPrecedecesseur(t) ? "green" : "red")+"\">"+(this.t.estPrecedecesseur(t) ? "✔":"✘")+"</p></html>";
                     break;
                 default:
                     o = "index du getVelueAt invalide";
