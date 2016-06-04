@@ -2,8 +2,10 @@ package UI;
 
 import T.Projet;
 import T.ProjetTableModel;
+import T.Tache;
 
 import javax.swing.*;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,7 +38,23 @@ public class Principale extends JFrame {
 
         JButton addTache = new JButton("Ajouter une tâche");
         addTache.addActionListener(new Ecouteur());
-        this.table = new JTable(this.p.getModel());
+        this.table = new JTable(this.p.getModel()) {
+            //  Determine editor to be used by row
+            public TableCellEditor getCellEditor(int row, int column)
+            {
+                if (column == 3) {
+                    JComboBox cb = new JComboBox(((ProjetTableModel)this.getModel()).getTacheAt(row).getModel_predecesseurs());
+                    cb.addActionListener(
+                            e -> {
+                                p.getTaches()[table.getSelectedRow()].addPredecesseur((Tache)cb.getSelectedItem());
+                            }
+                    );
+                    return new DefaultCellEditor(cb);
+                } else {
+                    return super.getCellEditor(row, column);
+                }
+            }
+        };
         this.table.addMouseListener(new EcouteurListe());
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.table.setComponentPopupMenu(this.popupMenu);
