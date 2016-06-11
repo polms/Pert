@@ -91,7 +91,7 @@ public class Tache implements Serializable {
         return (! this.equals(t) && ! t.estPrecedecesseur(this));
     }
 
-    public ArrayList<Tache> predecesseursPosible() {
+    public ArrayList<Tache> predecesseursModifiable() {
         ArrayList<Tache> liste = new ArrayList<>();
         for (Tache t : this.p.getTaches()) {
             if (this.peutAvoirPourPredecesseur(t)) {

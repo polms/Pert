@@ -11,11 +11,11 @@ class TacheComboBoxModel extends AbstractListModel implements ComboBoxModel {
     }
 
     public Object getElementAt(int index) {
-        return this.t.predecesseursPosible().get(index);
+        return this.t.predecesseursModifiable().get(index);
     }
 
     public int getSize() {
-        return this.t.predecesseursPosible().size();
+        return this.t.predecesseursModifiable().size();
     }
 
     public void setSelectedItem(Object anItem) {

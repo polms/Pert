@@ -6,6 +6,7 @@ import T.Tache;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,16 +45,14 @@ public class Principale extends JFrame {
             {
                 if (column == 3) {
                     JComboBox cb = new JComboBox(((ProjetTableModel)this.getModel()).getTacheAt(row).getModel_predecesseurs());
-                    cb.addActionListener(
-                            e -> {
-                                p.getTaches()[table.getSelectedRow()].addPredecesseur((Tache)cb.getSelectedItem());
-                            }
-                    );
+                    cb.addActionListener(new Combo_ecouteur(cb));
                     return new DefaultCellEditor(cb);
                 } else {
                     return super.getCellEditor(row, column);
                 }
+               
             }
+           
         };
         this.table.addMouseListener(new EcouteurListe());
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -101,8 +100,10 @@ public class Principale extends JFrame {
             JFileChooser fileChooser = new JFileChooser("G:\\");
             if (fileChooser.showOpenDialog(Principale.this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
-                p = Projet.loadFromFile(file);
-                if (p != null) {
+                Projet pt = Projet.loadFromFile(file);
+                if (pt != null) {
+                	p = pt;
+                	pt = null;
                     table.setModel(p.getModel());
                     p.getModel().fireTableDataChanged();
                 }
@@ -151,6 +152,24 @@ public class Principale extends JFrame {
         }
     }
 
+    public class Combo_ecouteur implements ActionListener {
+    	private JComboBox<ProjetTableModel> cb;
+    	
+    	public Combo_ecouteur(JComboBox<ProjetTableModel> cb) {
+    		this.cb = cb;
+    	}
+    	
+    	@Override
+    	public void actionPerformed(ActionEvent e) {
+            if (p.getTaches()[table.getSelectedRow()].estPrecedecesseur((Tache)cb.getSelectedItem())) { // supprime predecesseur
+            	p.getTaches()[table.getSelectedRow()].removePredecesseur((Tache)cb.getSelectedItem());
+            } else {
+            	p.getTaches()[table.getSelectedRow()].addPredecesseur((Tache)cb.getSelectedItem());
+            }
+            p.getModel().fireTableDataChanged();
+    	}
+    }
+    
     public static void main(String[] argv) throws IOException {
         Principale p = new Principale();
         p.setVisible(true);
