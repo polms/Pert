@@ -143,12 +143,6 @@ public class Principale extends JFrame {
                 ListSelectionModel model = table.getSelectionModel();
                 model.setSelectionInterval( rowNumber, rowNumber );
             }
-
-            if (e.getClickCount() == 2) {
-                new ModifierTacheUI(p,p.getTaches()[table.getSelectedRow()]);
-            } else if (e.getClickCount() == 3) { //TODO: a changer
-                p.supprimeTache(p.getTaches()[table.getSelectedRow()]);
-            }
         }
     }
 
