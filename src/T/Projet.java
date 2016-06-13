@@ -89,6 +89,9 @@ public class Projet implements Serializable {
     public Tache[] getTaches() {
         return  this.mesTaches.toArray(new Tache[this.mesTaches.size()]);
     }
+    public ArrayList<Tache> getListTaches() {
+        return  this.mesTaches;
+    }
 
     public Etape[] getEtape() {
         return  this.etapesGraph.toArray(new Etape[this.etapesGraph.size()]);

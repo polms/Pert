@@ -2,6 +2,7 @@ package ZoneDessin;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 
 import javax.swing.*;
 import T.*;
@@ -18,7 +19,7 @@ public class  Fenetre extends JFrame {
 	public Fenetre(){
 		super();
 		setTitle("FaitDesP�rt"); //On donne un titre � l'application
-		setSize(1024,720); //On donne une taille � notre fen�tre
+		setSize(1200,1024); //On donne une taille � notre fen�tre
 		setLocationRelativeTo(null); //On centre la fen�tre sur l'�cran
 		setResizable(true); //On interdit la redimensionnement de la fen�tre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit � l'application de se fermer lors du clic sur la croix
@@ -34,39 +35,14 @@ public class  Fenetre extends JFrame {
   		Tache t2=new Tache (p,"fumer",5);
   		Tache t3=new Tache (p,"dormir",30);
   		Tache t4=new Tache (p,"se reveiller",30);
-  		
   		t3.addPredecesseur(t2);
   		t2.addPredecesseur(t4);
   		t1.addPredecesseur(t4);
   		t3.addPredecesseur(t4);
   		t3.addPredecesseur(t1);
   		
-  		int tabTpC[]=new int[p.getNBTache()];// tableau de tache par colonne exemple :tabTpC[1]=5 il y a 5 tache dans la colonne 1
-  		//on initialise toute ses valeurs � 0
-  		for (int j=0;j<p.getNBTache();j++)
-  		{
-  			tabTpC[j]=0;
-  		}
-  		//on parcours toutes les cases du tableau
-  		for (int j=0;j<p.getNBTache();j++)
-  		{
-  			for (Tache t:p.getTaches())//on parcours toutes les taches
-  	  		{
-  	  			
-  	  			if (t.nbPredecesseur()==j)//si sont nombre de predescecceur correspond � la colonne du tableau 
-  	  			{
-  	  				tabTpC[j]++;//on l'incremente de 1
-  	  			}
-  	  		}
-  			
-  			
-  		}
+  		
   		/*
-  		for (int j=0;j<p.getNBTache();j++)
-  		{
-  			System.out.println("colonne "+j+" contient : "+tabTpC[j]+" taches.");
-  		}
-  		*/
   		int i=0;
   		for (Tache t:p.getTaches())//pour chaque tache du projet
   		{
@@ -77,13 +53,14 @@ public class  Fenetre extends JFrame {
   			
   			i++;
   		}
-  		
+  		*/
+  		//on dessine le pert sur le diagramme voir : paintComponent(final Graphics g) (dans le package ZoneDessin/ZoneDessinPert.java
   		ZoneDessinPert diagramme= new ZoneDessinPert(p);
+  		diagramme.ajouterEtape(p);//on met des etape dans le projet
   		diagramme.setLayout(new BorderLayout());
-  		diagramme.setSize(new Dimension(500,500));
-  		
-  		
-         this.getContentPane().add(diagramme, BorderLayout.CENTER);
+  		diagramme.setSize(new Dimension(1024,720));
+  		//on l'ajoute dans la fenetre
+        this.getContentPane().add(diagramme, BorderLayout.CENTER);
 		
 		
 		
