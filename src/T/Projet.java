@@ -93,7 +93,23 @@ public class Projet implements Serializable {
         return  this.mesTaches;
     }
 
-    public Etape[] getEtape() {
+    public int getNbEtape() {
+		return nbEtape;
+	}
+
+	public void setNbEtape(int nbEtape) {
+		this.nbEtape = nbEtape;
+	}
+
+	public int getNbTache() {
+		return nbTache;
+	}
+
+	public void setNbTache(int nbTache) {
+		this.nbTache = nbTache;
+	}
+
+	public Etape[] getEtape() {
         return  this.etapesGraph.toArray(new Etape[this.etapesGraph.size()]);
     }
 
@@ -109,13 +125,8 @@ public class Projet implements Serializable {
         return new ProjetTableModelPredecesseurs(this,t);
     }
 
-    public int getNBTache()  {
-        return this.nbTache;
-    }
 
-    public int getNBEtape()  {
-        return this.nbEtape;
-    }
+   
 
     public static Projet loadFromFile(File f) {
         Projet np = null;
@@ -134,4 +145,48 @@ public class Projet implements Serializable {
         }
         return np;
     }
+    
+    public int[] getTPC()
+	{
+    	//on va donc calculer le nombre de tache contenu dans chaque colonne:
+    			int tabTpC[]=new int[this.getNbTache()];// tableau de tache par colonne exemple :tabTpC[1]=5 il y a 5 tache dans la colonne 1
+    	  		//on initialise toute ses valeurs � 0
+    	  		for (int j=0;j<this.getNbTache();j++)
+    	  		{
+    	  			tabTpC[j]=0;
+    	  		}
+    	  		//on parcours toutes les cases du tableau
+    	  		for (int j=0;j<=this.getNbTache();j++)
+    	  		{
+    	  			
+    	  			for (Tache t:this.getTaches())//on parcours toutes les taches
+    	  	  		{
+    	  	  			
+    	  	  			if (t.nbPredecesseur()==j)//si sont nombre de predescecceur correspond � la colonne du tableau 
+    	  	  			{
+    	  	  				tabTpC[j]++;//on l'incremente de 1
+    	  	  			}
+    	  	  		}
+    	  			
+    	  			
+    	  		}
+    	  		return tabTpC;
+	
+	}
+    public void genererEtape()
+	{
+    	int[] tabTpC = this.getTPC();
+  		for (int j=0;j<this.getNbTache();j++)
+  		{
+  			if(tabTpC[j]!=0)
+  			{
+  				Etape e=new Etape(this,j*250+50,50);
+  				this.addEtape(e);
+  			}
+  		}
+  		Etape etapeFinal=new Etape(this,this.getNbTache()*250+50,50);
+  		this.addEtape(etapeFinal);
+  		
+	}
+    
 }

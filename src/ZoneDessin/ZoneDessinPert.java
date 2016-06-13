@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Ellipse2D.Double;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,83 +53,48 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			
 			super.paintComponent(g);
 			LinkedHashSet<Tache> listTacheDessine = this.getTacheDansLordre(p);
-			// ici on a	 donc une liste de tache trie dans l'ordre a afficher (listTacheDessine)
-				int nbEtapeAjouter=p.getNBEtape();
-	  		// puis la peindre
-	  		for (int compteur=0;compteur<nbEtapeAjouter;compteur++)
+			//on a	 donc une liste de tache trie dans l'ordre a afficher (listTacheDessine)
+			
+			//maintenant on paint les etapes generé par le projet
+			for (int compteur=0;compteur<p.getNbEtape();compteur++)//on parcours les etapes du projet
 	  		{
-	  			Etape actuel=p.getEtape()[compteur];
+	  			Etape actuel=p.getEtape()[compteur];//on récupère une etape ajouter dans le projet dans construire fenètre
 	  			paintEtape(actuel,g);//on la dessine
 	  		}
-	  		//pour chaque atche à dessine :
-	  		
-	  		for (int i=0;i<listTacheDessine.size();i++)
+
+			//on génére un tableau de tache par colonne :
+			int[] tabTpC = p.getTPC();
+			
+	  		int compteurTache=0;
+	  		// on parcours chaque colonne 
+	  		for (int j=0;j<p.getNbEtape();j++)
 	  		{
-	  			((Tache) listTacheDessine.toArray()[i]).setApres(p.getEtape()[i]);
-	  		}
-	  		for (int i=0;i<(listTacheDessine.size()-1);i++)
-	  		{
-	  			
-	  			paintTache(((Tache) listTacheDessine.toArray()[i]),g,((Tache) listTacheDessine.toArray()[i]).getApres().pointAvant(),((Tache) listTacheDessine.toArray()[i+1]).getApres().pointApres()) ;
-	  		
-	  		}
-	  		
+	  			//System.out.println("colonne "+j+" contient : "+tabTpC[j]+" taches.");
+	  			//et pour chaque tache 	
+	  				for (int ibis=0;ibis<tabTpC[j];ibis++)
+		  			{
+	  					Tache tacheactuel=(Tache) listTacheDessine.toArray()[compteurTache];
+	  					if (ibis>0)//si il y a plus d'une tache dans la colonne
+	  					{
+	  						tacheactuel.setEstFictive(true);//les suivante sont fictive
+	  					}
+	  					//on défini les etapes relié par la taches
+	  					tacheactuel.setAvant(p.getEtape()[j]);
+	  					tacheactuel.setApres(p.getEtape()[j+1]);
+	  					//on la paint
+	  					paintTache(tacheactuel,g,tacheactuel.getAvant().pointAvant(),tacheactuel.getApres().pointApres());
+	  					compteurTache++;
+		  			}
 	  		
 	  	
 	  		
+	  		}
+	  	
+	  		
 		}
-	public int ajouterEtape(Projet p)
-	{
-		int tabTpC[]=this.tacheParColonne(p);// tableau de tache par colonne exemple :tabTpC[1]=5 il y a 5 tache dans la colonne 1
-  		int nbEtapeAjouter=0;
-  		// on parcours chaque colonne pour ajouter les etape dans le projet
-  		for (int j=0;j<p.getNBTache();j++)
-  		{
-  			//System.out.println("colonne "+j+" contient : "+tabTpC[j]+" taches.");
-  			//et pour chaque tache dans la colonne
-  			if (tabTpC[j]!=0)
-  			{
-  				for (int ibis=0;ibis<tabTpC[j];ibis++)
-	  			{
-	  				// j : collonne | tabTpC[j] nb de tache dans la colonne
-  					Etape e=new Etape(p,j*250+50,50+200*ibis);
-  					e.
-	  				p.addEtape(e);// on ajoute une etape au projet 
-	  				nbEtapeAjouter++;
-	  			}
-  			}
-  	
-  		}
-  		// et l'etape final :
-  		p.addEtape(new Etape(p,p.getNBTache()*250+50,50));// on ajoute une etape au projet 
-  		nbEtapeAjouter++;
-  		return nbEtapeAjouter;
-	}
-	public int[] tacheParColonne(Projet p)
-	{
-		//on va donc calculer le nombre de tache contenu dans chaque colonne:
-		int tabTpC[]=new int[p.getNBTache()];// tableau de tache par colonne exemple :tabTpC[1]=5 il y a 5 tache dans la colonne 1
-  		//on initialise toute ses valeurs ï¿½ 0
-  		for (int j=0;j<p.getNBTache();j++)
-  		{
-  			tabTpC[j]=0;
-  		}
-  		//on parcours toutes les cases du tableau
-  		for (int j=0;j<=p.getNBTache();j++)
-  		{
-  			for (Tache t:p.getTaches())//on parcours toutes les taches
-  	  		{
-  	  			
-  	  			if (t.nbPredecesseur()==j)//si sont nombre de predescecceur correspond ï¿½ la colonne du tableau 
-  	  			{
-  	  				tabTpC[j]++;//on l'incremente de 1
-  	  			}
-  	  		}
-  			
-  			
-  		}
-  		return tabTpC;
-	}
+
+
+	
 	public void paintEtape(Etape etape, Graphics g)
 	{
 			
@@ -174,16 +140,16 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		//tant que la liste des tache a dessine ne fait pas la taille du tablmeau de tache :
 		while (listTacheDessine.size()!=p.getTaches().length)
 		{
-			// si on a parcouru toute les taches mais pas toute déssiné :
+			// si on a parcouru toute les taches mais pas tout trié :
 			if (i==p.getTaches().length&&listTacheDessine.size()!=p.getTaches().length)
 			{
 				i=0;// on parcours à nouveau la liste des tache
 			}
 			
-			// si la tache t n'est pas initial, et que les predecesseurs de la tache t sont dans la liste des taches a dessiné 
+			// si la tache t n'est pas initial, et que les predecesseurs de la tache t sont dans la liste des taches a trié 
 			if (p.getTaches()[i].nbPredecesseur()!=0&&listTacheDessine.containsAll(p.getTaches()[i].getPredecesseurs()))
 			{
-				// on ajoute la tache dans la liste
+				// on ajoute la tache dans la liste trié
         		listTacheDessine.add(p.getTaches()[i]);
 			}
 			i++;//on passe à la tache suivante 	
@@ -200,11 +166,26 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			}
 			
 	    	g.setColor(c);
-	    	g.drawString(tache.getDescription(), etapePrecedente.x+10, +etapeSuivante.y+10); 
-	        ((Graphics2D) g).draw(new Line2D.Double(etapePrecedente, etapeSuivante));
-	       
-	        drawArrowHead((Graphics2D) g,etapeSuivante , etapePrecedente, c);
-	  
+	    	if (tache.isEstFictive())
+		    	{
+		    		c=Color.green;
+		    		g.setColor(c);
+		    		Point milieuEtape=new Point(((etapePrecedente.x+etapeSuivante.x)/2),((etapePrecedente.y+etapeSuivante.y)/2)+50);
+		    	 	g.drawString(tache.getDescription(), ((etapePrecedente.x+etapeSuivante.x)/2), (((etapePrecedente.y+etapeSuivante.y)/2)+100)); 
+			    	g.drawString(String.valueOf(tache.getDuree()), ((etapePrecedente.x+etapeSuivante.x)/2), (((etapePrecedente.y+etapeSuivante.y)/2)+115)); 
+			    	((Graphics2D) g).draw(new Line2D.Double(etapePrecedente, milieuEtape));
+			    	((Graphics2D) g).draw(new Line2D.Double(milieuEtape, etapeSuivante));
+			    	 drawArrowHead((Graphics2D) g,etapeSuivante , milieuEtape, c);
+		    	}
+	    	else
+		    	{
+			    	g.drawString(tache.getDescription(), ((etapePrecedente.x+etapeSuivante.x)/2), (((etapePrecedente.y+etapeSuivante.y)/2)-5)); 
+			    	g.drawString(String.valueOf(tache.getDuree()), ((etapePrecedente.x+etapeSuivante.x)/2), (((etapePrecedente.y+etapeSuivante.y)/2)+15)); 
+				       
+			    	((Graphics2D) g).draw(new Line2D.Double(etapePrecedente, etapeSuivante));
+			       
+			        drawArrowHead((Graphics2D) g,etapeSuivante , etapePrecedente, c);
+		    	}
 			}
 	   private void drawArrowHead(Graphics2D g2, Point tip, Point tail, Color color)
 	    {
@@ -212,7 +193,6 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	        double dy = tip.y - tail.y;
 	        double dx = tip.x - tail.x;
 	        double theta = Math.atan2(dy, dx);
-	        //System.out.println("theta = " + Math.toDegrees(theta));
 	        double x, y, rho = theta + Math.toRadians(40);
 	        for(int j = 0; j < 2; j++)
 	        {

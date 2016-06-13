@@ -6,7 +6,26 @@ import T.Projet;
 
 public class Etape {
 	Projet p;
-	
+	private int datePlusTot;
+	private int datePlusTard;
+	public int getDatePlusTot() {
+		return datePlusTot;
+	}
+	public void setDatePlusTot(int datePlusTot) {
+		if (datePlusTot<this.datePlusTot)
+		{
+		this.datePlusTot = datePlusTot;
+		}
+	}
+	public int getDatePlusTard() {
+		return datePlusTard;
+	}
+	public void setDatePlusTard(int datePlusTard) {
+		if (datePlusTard>this.datePlusTard)
+		{
+		this.datePlusTard = datePlusTard;
+		}
+	}
 	private String id;
 	private Color c;
 	private int x;
@@ -24,9 +43,10 @@ public class Etape {
 		super();
 		this.p=p;
 		p.addEtape(this);
-		this.id = intToLetters(p.getNBEtape());
+		this.id = intToLetters(p.getNbEtape());
 		this.c=Color.WHITE;
-	
+		this.datePlusTard=0;
+		this.datePlusTot=0;
 		this.x=x;
 		this.y=y;
 	}

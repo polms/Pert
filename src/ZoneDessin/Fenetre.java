@@ -10,15 +10,13 @@ import T.*;
 
 
 public class  Fenetre extends JFrame {
-	/**
-	 * 
-	 */
 	
 	private static final long serialVersionUID = 8164118974463460991L;
 
+
 	public Fenetre(){
 		super();
-		setTitle("FaitDesP�rt"); //On donne un titre � l'application
+		setTitle("FaitDesPert"); //On donne un titre � l'application
 		setSize(1200,1024); //On donne une taille � notre fen�tre
 		setLocationRelativeTo(null); //On centre la fen�tre sur l'�cran
 		setResizable(true); //On interdit la redimensionnement de la fen�tre
@@ -40,25 +38,11 @@ public class  Fenetre extends JFrame {
   		t1.addPredecesseur(t4);
   		t3.addPredecesseur(t4);
   		t3.addPredecesseur(t1);
-  		
-  		
-  		/*
-  		int i=0;
-  		for (Tache t:p.getTaches())//pour chaque tache du projet
-  		{
-  			
-  				// on creer 2 etapes
-  				p.addEtape(new Etape(p,i*250+50,50));
-  	  			p.addEtape(new Etape(p,i*250+300,50));
-  			
-  			i++;
-  		}
-  		*/
-  		//on dessine le pert sur le diagramme voir : paintComponent(final Graphics g) (dans le package ZoneDessin/ZoneDessinPert.java
+  		p.genererEtape();
+  		//on dessine le pert sur le diagramme voir : paintComponent(final Graphics g) (dans le package ZoneDessin/ZoneDessinPert.java)
   		ZoneDessinPert diagramme= new ZoneDessinPert(p);
-  		diagramme.ajouterEtape(p);//on met des etape dans le projet
   		diagramme.setLayout(new BorderLayout());
-  		diagramme.setSize(new Dimension(1024,720));
+  		diagramme.setSize(new Dimension(500,500));
   		//on l'ajoute dans la fenetre
         this.getContentPane().add(diagramme, BorderLayout.CENTER);
 		
