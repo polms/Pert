@@ -15,6 +15,7 @@ public class Projet implements Serializable {
     private String nom;
     private int nbTache;
     private int nbEtape;
+    private int espacementEtape;
     private transient ProjetTableModel model;
 
     public Projet(String nom) {
@@ -24,9 +25,24 @@ public class Projet implements Serializable {
         this.model = new ProjetTableModel(this);
         this.nbTache = 0;
         this.nbEtape=0;
+        this.espacementEtape=250;
     }
 
-    @Deprecated // cette fonction vas devenir privée
+    public int getEspacementEtape() {
+		return espacementEtape;
+	}
+
+	public void setEspacementEtape(int espacementEtape) {
+		this.espacementEtape = espacementEtape;
+	}
+	public void incEspacementEtape() {
+		this.espacementEtape++;
+	}
+	public void decEspacementEtape() {
+		this.espacementEtape--;
+	}
+
+	@Deprecated // cette fonction vas devenir privée
     public void addTaches(Tache t) {
         if (t != null && ! this.mesTaches.contains(t)) {
             this.mesTaches.add(t);
@@ -176,15 +192,17 @@ public class Projet implements Serializable {
     public void genererEtape()
 	{
     	int[] tabTpC = this.getTPC();
+    
   		for (int j=0;j<this.getNbTache();j++)
   		{
+  			
   			if(tabTpC[j]!=0)
   			{
-  				Etape e=new Etape(this,j*250+50,50);
+  				Etape e=new Etape(this,j*this.espacementEtape+50,50);
   				this.addEtape(e);
   			}
   		}
-  		Etape etapeFinal=new Etape(this,this.getNbTache()*250+50,50);
+  		Etape etapeFinal=new Etape(this,this.getNbTache()*this.espacementEtape+50,50);
   		this.addEtape(etapeFinal);
   		
 	}

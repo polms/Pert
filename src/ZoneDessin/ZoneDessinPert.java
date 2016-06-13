@@ -1,26 +1,18 @@
 package ZoneDessin;
 import javax.swing.*;
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import T.Projet;
 import T.Tache;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Ellipse2D;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Line2D;
-import java.awt.geom.Ellipse2D.Double;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 
-public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionListener
+public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionListener,MouseWheelListener
 	{
 	private Projet p;
 	boolean dragging = false;
@@ -38,6 +30,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			this.p=p;
 			addMouseListener(this);
 			addMouseMotionListener(this);
+			addMouseWheelListener(this);
 			setLayout(new BorderLayout());
 	        setBorder(BorderFactory.createLineBorder(Color.black));
 			
@@ -52,6 +45,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		protected void paintComponent(final Graphics g) {
 			
 			super.paintComponent(g);
+		
 			LinkedHashSet<Tache> listTacheDessine = this.getTacheDansLordre(p);
 			//on a	 donc une liste de tache trie dans l'ordre a afficher (listTacheDessine)
 			
@@ -66,6 +60,8 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			int[] tabTpC = p.getTPC();
 			
 	  		int compteurTache=0;
+	  		int tempsEcouler=0;
+	  		int tempsEcoulertard=0;
 	  		// on parcours chaque colonne 
 	  		for (int j=0;j<p.getNbEtape();j++)
 	  		{
@@ -73,6 +69,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	  			//et pour chaque tache 	
 	  				for (int ibis=0;ibis<tabTpC[j];ibis++)
 		  			{
+	  					
 	  					Tache tacheactuel=(Tache) listTacheDessine.toArray()[compteurTache];
 	  					if (ibis>0)//si il y a plus d'une tache dans la colonne
 	  					{
@@ -81,6 +78,26 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	  					//on défini les etapes relié par la taches
 	  					tacheactuel.setAvant(p.getEtape()[j]);
 	  					tacheactuel.setApres(p.getEtape()[j+1]);
+	  					//calcul des date au plus tard/tot:
+	  					if (ibis==0)
+	  					{
+	  						p.getEtape()[j+1].setDatePlusTot(tempsEcouler+tacheactuel.getDuree());
+	  					}
+	  					
+	  					if (ibis>0)//plusieurs tache dans la colonne
+	  					{
+	  						
+	  						tempsEcouler=tempsEcouler+tacheactuel.getDuree();
+	  						//on regarde si le temps obtenu est plus petit que la date au plus tot de l'etape:
+	  						if (p.getEtape()[j+1].getDatePlusTot()>tempsEcouler)
+	  							{
+	  								p.getEtape()[j+1].setDatePlusTot(tempsEcouler);
+	  							}
+	  					}
+	  					//la date au plus tard :
+	  					tempsEcoulertard=tempsEcoulertard+tacheactuel.getDuree();
+	  					p.getEtape()[j+1].setDatePlusTard(tempsEcoulertard);
+	  					
 	  					//on la paint
 	  					paintTache(tacheactuel,g,tacheactuel.getAvant().pointAvant(),tacheactuel.getApres().pointApres());
 	  					compteurTache++;
@@ -114,7 +131,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 			g.drawString(etape.getId(), etape.getX()+50, etape.getY()+30);
 			g.drawLine(etape.getX(), etape.getY()+50, etape.getX()+100, etape.getY()+50);
 			g.drawLine(etape.getX()+50, etape.getY()+50, etape.getX()+50, etape.getY()+100);
-			g.drawString(etape.getDateplusTot().toString()+"            "+etape.getDateplusTard().toString(), etape.getX()+25, etape.getY()+80);
+			g.drawString(String.valueOf(etape.getDatePlusTot())+"            "+String.valueOf(etape.getDatePlusTard()), etape.getX()+25, etape.getY()+80);
 			
 			
 			}
@@ -123,7 +140,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		LinkedHashSet<Tache> listTacheDessine = new LinkedHashSet<Tache>();
 		int i=0;//
 		//initilisation 
-		//on ajoute les première taches
+		//on ajoute les taches initiales:
 		for (Tache t : p.getTaches() )
 		{
 			if (t.nbPredecesseur()==0)
@@ -146,7 +163,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 				i=0;// on parcours à nouveau la liste des tache
 			}
 			
-			// si la tache t n'est pas initial, et que les predecesseurs de la tache t sont dans la liste des taches a trié 
+			// si la tache t n'est pas initial, et que  la liste des taches a trié contient tout les predecesseur de t
 			if (p.getTaches()[i].nbPredecesseur()!=0&&listTacheDessine.containsAll(p.getTaches()[i].getPredecesseurs()))
 			{
 				// on ajoute la tache dans la liste trié
@@ -285,6 +302,34 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		// TODO Auto-generated method stub
 		
 	}
+	public void mouseWheelMoved(MouseWheelEvent evt) {
+		if (evt.isControlDown()
+				&& evt.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+			int scrolled = evt.getWheelRotation();
+			if (scrolled < 0) {
+				for (int s = 0; s > scrolled; --s) {
+					//zommer
+					p.incEspacementEtape();
+					repaint();
+
+				}
+
+			}
+			
+			
+			
+			else 
+			{
+				for (int s = 0; s < scrolled; ++s) {
+					//dezommer
+					p.decEspacementEtape();
+					repaint();
+					
+				}
+			}
+
+		}
+	}
 
 
 
@@ -295,4 +340,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
 }

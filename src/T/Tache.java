@@ -14,7 +14,7 @@ public class Tache implements Serializable {
     private String description;
     private int duree;
     private boolean estCheminCritique;
-    private boolean estInverse;
+    private boolean estFictive;
     private HashSet<Tache> mesPredecesseurs;
     private Etape avant;
     private Etape apres;
@@ -24,12 +24,11 @@ public class Tache implements Serializable {
     public Tache(Projet p, String description, int duree) {
         this.p = p;
         p.addTaches(this);
-        this.id = intToLetters(p.getNBTache());
+        this.id = intToLetters(p.getNbTache());
         this.description = description;
         this.duree = duree;
         this.mesPredecesseurs = new HashSet<>();
         this.estCheminCritique = false;
-        this.estInverse = false;
         this.model_predecesseurs = new TacheComboBoxModel(this);
     }
 
@@ -53,7 +52,7 @@ public class Tache implements Serializable {
         boolean annuler = false;
 
         if (! this.equals(t)) {
-            for (int i = 0; i < this.p.getNBTache(); i++) {
+            for (int i = 0; i < this.p.getNbTache(); i++) {
                 Tache cur = this.p.getTaches()[i];
                 HashSet<Tache> cur_pre = this.p.getTaches()[i].getPredecesseurs();
 
@@ -164,28 +163,40 @@ public class Tache implements Serializable {
         return this.estCheminCritique;
     }
 
-    @Override
-    public int hashCode() {
-        return id.hashCode();
+    public boolean isEstFictive() {
+        return estFictive;
+    }
+
+    public void setEstFictive(boolean estFictive) {
+        this.estFictive = estFictive;
     }
 
     public boolean equals(Tache o) {
         return (this.p == o.getProjet()) && (this.id.equals(o.getId()));
     }
 
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
+
     public boolean estPrecedecesseur(Tache o) {
         return (this.p == o.getProjet()) && (this.mesPredecesseurs.contains(o));
     }
 
+	public String toString() {
+        return this.id;
+	}
     public boolean precede(Tache t) {
         return t.getPredecesseurs().contains(this);
     }
 
-    public String toString() {
-        return this.id;
-    }
 
-    public static String intToLetters(int value) {
+    public Etape getAvant() {
+		return avant;
+	}
+
+	public static String intToLetters(int value) {
         String result = "";
         while (--value >= 0) {
             result = (char) ('A' + value % 26) + result;

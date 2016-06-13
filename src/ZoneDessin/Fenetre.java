@@ -1,9 +1,6 @@
 package ZoneDessin;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-
 import javax.swing.*;
 import T.*;
 
@@ -17,7 +14,7 @@ public class  Fenetre extends JFrame {
 	public Fenetre(){
 		super();
 		setTitle("FaitDesPert"); //On donne un titre � l'application
-		setSize(1200,1024); //On donne une taille � notre fen�tre
+		setSize(100,100); //On donne une taille � notre fen�tre
 		setLocationRelativeTo(null); //On centre la fen�tre sur l'�cran
 		setResizable(true); //On interdit la redimensionnement de la fen�tre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit � l'application de se fermer lors du clic sur la croix
@@ -42,12 +39,10 @@ public class  Fenetre extends JFrame {
   		//on dessine le pert sur le diagramme voir : paintComponent(final Graphics g) (dans le package ZoneDessin/ZoneDessinPert.java)
   		ZoneDessinPert diagramme= new ZoneDessinPert(p);
   		diagramme.setLayout(new BorderLayout());
-  		diagramme.setSize(new Dimension(500,500));
   		//on l'ajoute dans la fenetre
-        this.getContentPane().add(diagramme, BorderLayout.CENTER);
-		
-		
-		
+  		
+  		
+        this.getContentPane().add(diagramme);
 		
 	}
 }

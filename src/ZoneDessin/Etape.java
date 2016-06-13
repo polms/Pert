@@ -12,10 +12,9 @@ public class Etape {
 		return datePlusTot;
 	}
 	public void setDatePlusTot(int datePlusTot) {
-		if (datePlusTot<this.datePlusTot)
-		{
+	
 		this.datePlusTot = datePlusTot;
-		}
+		
 	}
 	public int getDatePlusTard() {
 		return datePlusTard;
@@ -91,13 +90,7 @@ public void setY(int y) {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Date getDateplusTot() {
-		return new Date (0);
-	}
-
-	public Date getDateplusTard() {
-		return new Date (0);
-	}
+	
     public static String intToLetters(int value) {
         String result = "";
         while (--value >= 0) {
