@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 public class ProjetTableModel extends AbstractTableModel {
     private Projet p;
     private Tache t;
-    private String[] noms = {"Identifiant", "Description", "temp", "Prédécesseurs",};
+    private String[] noms = {"Identifiant", "Description", "temp", "Prédécesseurs"};
 
     public ProjetTableModel(Projet p) {
         this.p = p;
@@ -28,9 +28,13 @@ public class ProjetTableModel extends AbstractTableModel {
         return 4;
     }
 
+    public Tache getTacheAt(int row) {
+        return this.p.getTaches()[row];
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Tache t = this.p.getTaches()[rowIndex];
+        Tache t = getTacheAt(rowIndex);
         Object o;
         switch (columnIndex) {
             case 0:
@@ -52,7 +56,7 @@ public class ProjetTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int rowIndex,int columnIndex) {
-        return columnIndex == 1 || columnIndex == 2;
+        return true;
     }
 
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) throws IllegalArgumentException {
@@ -72,7 +76,7 @@ public class ProjetTableModel extends AbstractTableModel {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("La colone n'est pas modifiable: "+columnIndex);
+                //throw new IllegalArgumentException("La colone n'est pas modifiable: "+columnIndex);
         }
     }
 }

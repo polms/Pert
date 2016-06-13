@@ -4,6 +4,7 @@ import ZoneDessin.Etape;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -17,6 +18,7 @@ public class Tache implements Serializable {
     private HashSet<Tache> mesPredecesseurs;
     private Etape avant;
     private Etape apres;
+    private TacheComboBoxModel model_predecesseurs;
     private Projet p;
 
     public Tache(Projet p, String description, int duree) {
@@ -28,11 +30,12 @@ public class Tache implements Serializable {
         this.mesPredecesseurs = new HashSet<>();
         this.estCheminCritique = false;
         this.estInverse = false;
+        this.model_predecesseurs = new TacheComboBoxModel(this);
     }
 
     public boolean addPredecesseur(Tache t) {
         boolean ajouter = false;
-        if (! this.equals(t) && ! t.estPrecedecesseur(this)) { //eviter les boucle
+        if (this.peutAvoirPourPredecesseur(t)) { //eviter les boucle
             for (Tache tc: this.p.getTaches()) { // ajout des contrainte aux successeurs de this
                 if ( ! (this.equals(tc) || tc.getPredecesseurs().isEmpty()) && tc.estPrecedecesseur(this)) { //eviter les boucle + opti
                     if (tc.getPredecesseurs().containsAll(this.getPredecesseurs()) && tc.getPredecesseurs().contains(this)) {
@@ -84,6 +87,20 @@ public class Tache implements Serializable {
         }
     }
 
+    public boolean peutAvoirPourPredecesseur(Tache t) {
+        return (! this.equals(t) && ! t.estPrecedecesseur(this));
+    }
+
+    public ArrayList<Tache> predecesseursModifiable() {
+        ArrayList<Tache> liste = new ArrayList<>();
+        for (Tache t : this.p.getTaches()) {
+            if (this.peutAvoirPourPredecesseur(t)) {
+                liste.add(t);
+            }
+        }
+        return liste;
+    }
+
     private void removePredecesseurUnsafe(Tache t) {
         this.mesPredecesseurs.remove(t);
     }
@@ -117,6 +134,10 @@ public class Tache implements Serializable {
     public void setDuree(int duree) {
         this.duree = duree;
         //this.p.getModel().fireTableDataChanged();
+    }
+
+    public TacheComboBoxModel getModel_predecesseurs() {
+        return this.model_predecesseurs;
     }
 
     public HashSet<Tache> getPredecesseurs() {
