@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class Projet implements Serializable {
     private static final long serialVersionUID = -3621411098598590248L;
-    private ZoneDessinPert lePert;
+    private transient ZoneDessinPert lePert;
     private ArrayList<Tache> mesTaches;
     private ArrayList <Etape> etapesGraph;
     private String nom;
@@ -150,6 +150,9 @@ public class Projet implements Serializable {
             ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(f)) ;
             np = (Projet) ois.readObject();
             np.setModel(new ProjetTableModel(np));
+            for (Tache t: np.getTaches()) {
+                t.setModel_predecesseurs(new TacheComboBoxModel(t));
+            }
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,

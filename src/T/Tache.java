@@ -18,7 +18,7 @@ public class Tache implements Serializable {
     private HashSet<Tache> mesPredecesseurs;
     private Etape avant;
     private Etape apres;
-    private TacheComboBoxModel model_predecesseurs;
+    private transient TacheComboBoxModel model_predecesseurs;
     private Projet p;
 
     public Tache(Projet p, String description, int duree) {
@@ -153,6 +153,10 @@ public class Tache implements Serializable {
 
     public void setApres(Etape apres) {
         this.apres = apres;
+    }
+
+    public void setModel_predecesseurs(TacheComboBoxModel m) {
+        this.model_predecesseurs = m;
     }
 
     public void setEstCheminCritique(boolean estCheminCritique) {
