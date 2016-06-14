@@ -46,11 +46,42 @@ public class Principale extends JFrame {
                 if (column == 3) {
                     JComboBox cb = new JComboBox(((ProjetTableModel)this.getModel()).getTacheAt(row).getModel_predecesseurs());
                     cb.addActionListener(new Combo_ecouteur(cb));
+                    cb.setRenderer(new ComboBoxRenderer(row));
                     return new DefaultCellEditor(cb);
                 } else {
                     return super.getCellEditor(row, column);
                 }
                
+            }
+            class ComboBoxRenderer extends javax.swing.plaf.basic.BasicComboBoxRenderer
+            {
+                private int row;
+                public ComboBoxRenderer(int row)
+                {
+                    super();
+                    this.row = row;
+                    setOpaque(true);
+                }
+                public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus)
+                {
+                    if (value instanceof Tache) {
+                        setText(((Tache) value).getId());
+                        if (((Tache) value).precede(p.getTaches()[this.row])) {
+                            if(isSelected) {
+                                setBackground(new Color(143, 89, 63));
+                            } else {
+                                setBackground(new Color(167, 102, 74));
+                            }
+                        } else {
+                            if (isSelected) {
+                                setBackground(new Color(98, 131, 98));
+                            } else {
+                                setBackground(new Color(130, 178, 136));
+                            }
+                        }
+                    }
+                    return this;
+                }
             }
            
         };
