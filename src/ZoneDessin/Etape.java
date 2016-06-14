@@ -1,10 +1,11 @@
 package ZoneDessin;
 import java.awt.Color;
 import java.awt.Point;
+import java.io.Serializable;
 
 import T.Projet;
 
-public class Etape {
+public class Etape implements Serializable {
 	Projet p;
 	private int datePlusTot;
 	private int datePlusTard;

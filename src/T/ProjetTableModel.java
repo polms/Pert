@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 @SuppressWarnings("SpellCheckingInspection")
 public class ProjetTableModel extends AbstractTableModel {
     private Projet p;
-    private Tache t;
     private String[] noms = {"Identifiant", "Description", "temp", "Prédécesseurs"};
 
     public ProjetTableModel(Projet p) {
