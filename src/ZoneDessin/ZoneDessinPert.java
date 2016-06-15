@@ -45,7 +45,8 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 		protected void paintComponent(final Graphics g) {
 			
 			super.paintComponent(g);
-		
+		if (p.getNbTache()>0)
+		{
 			LinkedHashSet<Tache> listTacheDessine = this.getTacheDansLordre(p);
 			//on a	 donc une liste de tache trie dans l'ordre a afficher (listTacheDessine)
 			
@@ -106,6 +107,7 @@ public class ZoneDessinPert extends JPanel implements MouseListener,MouseMotionL
 	  	
 	  		
 	  		}
+		}
 	  	
 	  		
 		}
