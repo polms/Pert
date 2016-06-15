@@ -176,21 +176,15 @@ public class Tache implements Serializable {
     }
 
     public boolean equals(Tache o) {
-        return (this.p == o.getProjet()) && (this.id.equals(o.getId()));
+        return (this.p.getNom().equals(o.getProjet().getNom()))&&(this.description.equals(o.description));
     }
 
-    @Override
-    public int hashCode() {
-        return this.id.hashCode();
-    }
+    
 
     public boolean estPrecedecesseur(Tache o) {
         return (this.p == o.getProjet()) && (this.mesPredecesseurs.contains(o));
     }
 
-	public String toString() {
-        return this.id;
-	}
     public boolean precede(Tache t) {
         return t.getPredecesseurs().contains(this);
     }
@@ -207,5 +201,15 @@ public class Tache implements Serializable {
             value /= 26;
         }
         return result;
+    }
+
+   @Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return this.description.hashCode();
+	}
+
+	public String toString() {
+        return this.description;
     }
 }
